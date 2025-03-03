@@ -60,7 +60,7 @@ sudo apt update && sudo apt install terraform
    - `providers.tf`
    - `main.tf`
 3. Run `terraform init`.
-4. **Versioning Consideration**: You don't have to specify the Terraform version in `providers.tf`. After initialization, a `.terraform.lock.hcl` file is created, where the locked version can be referenced.
+4. **Versioning Consideration**: You don't have to specify the Terraform version in providers.tf. After initialization, a .terraform.lock.hcl file is created, where the locked version can be referenced. If you wish to lock in the latest version within the provider block, you can find the exact version inside this lock file, as documentation versions can sometimes be slightly out of date.
 
 ## Using CloudFormation for OIDC Authentication
 
