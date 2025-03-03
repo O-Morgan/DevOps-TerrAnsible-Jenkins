@@ -15,7 +15,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ..mtc-terransible
+        working-directory: ./mtc-terransible
 
     steps:
       - name: Checkout the repository
