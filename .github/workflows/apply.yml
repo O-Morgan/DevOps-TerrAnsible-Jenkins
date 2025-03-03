@@ -9,6 +9,7 @@ on:
 permissions:
   contents: read
   id-token: write
+  pull-requests: write  # Needed to post a PR comment
 
 jobs:
   terraform_apply:
@@ -30,13 +31,25 @@ jobs:
         with:
           role-to-assume: ${{ secrets.OIDC_ROLE_ARN }}  
           aws-region: "eu-west-2"
-          
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
         run: terraform init
+
+      # ✅ Add PR comment before running apply
+      - name: Comment on PR
+        uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            🚀 **Terraform Apply Started!**
+            This workflow was triggered after the **Terraform Plan** workflow completed.
+            Check the logs [here](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo: ${{ github.repository }}
+          issue: ${{ github.event.workflow_run.pull_requests[0].number }}
+          allow-repeats: false
 
       - name: Terraform Apply
         run: terraform apply -input=false -auto-approve
