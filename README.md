@@ -141,4 +141,4 @@ This project is licensed under the MIT License.
 
 
 
-terraform state management updated 
+add a piece on tf state management include deleting items from dynamo db if previous locks have been created incorrectly state conflict happens 
