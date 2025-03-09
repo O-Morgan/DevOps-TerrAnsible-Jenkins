@@ -20,7 +20,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: latest
+          terraform_version: 1.11.1  #Specify the version you use locally
 
       - name: Install TFLint
         run: |
@@ -28,6 +28,9 @@ jobs:
 
       - name: Run Terraform Format Check
         run: terraform fmt -check -recursive
+
+      - name: Run Terraform Validate
+        run: terraform validate
 
       - name: Run TFLint
         run: tflint --init && tflint

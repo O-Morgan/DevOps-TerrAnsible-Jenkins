@@ -133,7 +133,8 @@ git merge <branch-name>
 - Implement Terraform modules for modular infrastructure
 - automate the the initialisation, plan and apply phases through workflow actions.
 
-
+## add terraform fmt -recursive
+## terraform validate 
 
 ## License
 
