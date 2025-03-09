@@ -26,11 +26,11 @@ jobs:
         with:
           terraform_version: latest
 
-      - name: Configure AWS Credentials
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.OIDC_ROLE_ARN }}
-          aws-region: eu-west-2
+          role-to-assume: ${{ secrets.OIDC_ROLE_ARN }}   
+          aws-region: "eu-west-2"
 
       - name: Terraform Init
         run: terraform init
