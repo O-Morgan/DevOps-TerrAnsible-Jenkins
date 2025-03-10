@@ -17,27 +17,34 @@ jobs:
       id-token: write
       contents: read
 
+    environment: development  # Ensure the correct environment is referenced
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./mtc-terransible  # Explicitly set working directory
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.OIDC_ROLE_ARN }}  
+          aws-region: "eu-west-2"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: latest
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.OIDC_ROLE_ARN }}   
-          aws-region: "eu-west-2"
-
       - name: Terraform Init
         run: terraform init
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -out=tfplan
+        run: terraform plan -out=tfplan -input=false
 
       - name: Terraform Apply
         if: success()
