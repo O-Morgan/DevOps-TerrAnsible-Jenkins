@@ -1,0 +1,42 @@
+name: 'Terraform Apply'
+
+on:
+  workflow_run:
+    workflows: ['Terraform Plan']
+    types:
+      - completed
+
+permissions:
+  contents: read
+  id-token: write
+  pull-requests: write  # Needed to post a PR comment
+
+jobs:
+  terraform_apply:
+    name: 'Terraform Apply'
+    runs-on: ubuntu-latest
+    environment: development
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./mtc-terransible
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.OIDC_ROLE_ARN }}  
+          aws-region: "eu-west-2"
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Apply
+        run: terraform apply -input=false -auto-approve
