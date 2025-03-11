@@ -7,3 +7,11 @@ resource "aws_vpc" "mtc_vpc" {
     Name = "mtc_vpc"
   }
 }
+
+resource "aws_internet_gateway" "mtc_IGW" {
+  vpc_id = aws_vpc.mtc_vpc.id
+
+  tags = {
+    Name = "mtc_igw"
+  }
+}
