@@ -139,6 +139,8 @@ git merge <branch-name>
 add a piece on in line comments # this is an inline comment 
 terraform prefers block comments 
 
+add terraform fmt -recursive
+add terraform validate
 
 ## License
 
