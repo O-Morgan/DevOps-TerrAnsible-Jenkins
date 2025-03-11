@@ -139,8 +139,6 @@ git merge <branch-name>
 add a piece on in line comments # this is an inline comment 
 terraform prefers block comments 
 
-this is a block comment /* Replace with your actual S3 bucket name */
-
 
 ## License
 
