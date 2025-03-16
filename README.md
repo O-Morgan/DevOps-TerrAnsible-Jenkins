@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository is a hands-on project that integrates **Terraform**, **Ansible**, and **Jenkins** to deploy and manage cloud infrastructure efficiently. It covers setting up an automated CI/CD pipeline, managing cloud resources using Infrastructure as Code (IaC), and leveraging automation tools for configuration management.
+This repository is a hands-on project designed as a personal learning experience to grow my automation skills. It integrates Terraform, Ansible, and Jenkins to deploy and manage cloud infrastructure efficiently, covering automated CI/CD pipeline setup, Infrastructure as Code (IaC) for cloud resource management, and leveraging automation tools for configuration management.
 
 ## Features
 
