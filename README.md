@@ -4,6 +4,8 @@
 
 This repository is a hands-on project designed as a personal learning experience to grow my automation skills. It integrates Terraform, Ansible, and Jenkins to deploy and manage cloud infrastructure efficiently, covering automated CI/CD pipeline setup, Infrastructure as Code (IaC) for cloud resource management, and leveraging automation tools for configuration management.
 
+![DevOps Architecture so far](mtc-terransible/Devops-Terransible-Jenkins.jpg)
+
 ## Features
 
 - **Infrastructure as Code** with Terraform
@@ -31,6 +33,14 @@ This repository is a hands-on project designed as a personal learning experience
 - [Setting Up GitHub Actions](#setting-up-github-actions)
 - [Semantic Versioning](#semantic-versioning)
 - [Useful Git Commands](#useful-git-commands)
+- [Terraform State Management](#terraform-state-management)
+- [Terraform State Information](#terraform-state-information)
+  - [Viewing Items in Your State](#terraform-viewing-items-in-your-state)
+  - [terraform show](#terraform-show)
+  - [terraform state list](#terraform-state-list)
+  - [grep Filtering](#filter-with-grep)
+- [Adding Variables to Make a Deployment More Dynamic](#adding-variables-to-make-a-deployment-more-dynamic)
+- [Random Provider](#random-provider)
 - [Reference Documentation](#reference-documentation)
 
 ## GitHub Codespaces vs Gitpod
@@ -141,10 +151,145 @@ terraform prefers block comments
 
 add terraform fmt -recursive
 
+## Terraform State Management
+
+Add a piece on Terraform state management including deleting items from DynamoDB if previous locks have been created incorrectly — state conflict happens.
+
+## Terraform State Information
+
+### Terraform: Viewing Items in Your State
+
+```bash
+terraform show -json | jq
+```
+
+Without anything deployed:
+
+```json
+{ "format_version": "0.2" }
+```
+
+Only version format will be returned.
+
+Once `terraform apply` is run and resources are deployed, if you run:
+
+```bash
+terraform show -json | jq
+```
+
+again, this time you're returned the state displaying the resources deployed.
+
+### `terraform show`
+
+Shows state in an easy-to-read kind of way.
+
+### `terraform state list`
+
+```bash
+terraform state list
+```
+
+Example output:
+
+```
+aws_vpc.mtc_vpc
+```
+
+What resources have been deployed without extra info.
+
+### Filter with `grep`
+
+```bash
+terraform show | grep cidr_block
+```
+
+Example output:
+
+```bash
+assign_generated_ipv6_cidr_block = false
+cidr_block = 10.123.0.0/16
+```
+
+## Adding Variables to Make a Deployment More Dynamic
+
+Variables in multiple languages just hold values you want to use in multiple places.
+
+Dots, slashes, and numbers are interpreted as strings:
+
+```bash
+"./12" = "string"
+```
+
+### Basic Variable
+
+```bash
+variable "vpc_cidr" {}
+```
+
+You will be asked to provide the CIDR upon deployment when running `terraform apply`.
+
+### With Type Specified
+
+```bash
+variable "vpc_cidr" {
+  type = string
+}
+```
+
+This is a nicer way of putting it. Then you can use a dev or prod `.tfvars` file where you can specify the CIDR value.
+
+If you are using multiple `.tfvars`, you can specify the default value in the main `variables.tf`:
+
+```bash
+variable "vpc_cidr" {
+  type    = string
+  default = "10.2.0.0/16"
+}
+```
+
+Specifying the CIDR in a `.tfvars` file looks like:
+
+```bash
+vpc_cidr = "10.2.0.0/16"
+```
+
+Obviously, the default will be removed from the main `variables.tf`.
+
+## Random Provider
+
+Random is another provider — you need to run:
+
+```bash
+terraform init
+```
+
+There’s some great stuff in the documentation, where you can generate or create a resource with a random ID, let's say.
+
+Using the `random_id` resource, you could generate resources and differentiate between them based on which VPC they are deployed in.
+
+You'll find this used a lot when working with EC2, load balancers, etc., where you will need random IDs.
+
+### Example Resource
+
+```bash
+resource "random_id" "random" {
+  byte_length = 2
+}
+```
+
+- `byte_length = 1` = 8 bits of randomness
+
+Once assigned, you can use the output in most things that require random/unique IDs. For example, with tags:
+
+```bash
+name = "mtc_vpc-${random_id.random.dec}"
+name = "mtc_igw-${random_id.random.dec}"
+```
+[Random Provider Documentation](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id)
+
 ## License
 
 This project is licensed under the MIT License.
 
 
 
-add a piece on tf state management include deleting items from dynamo db if previous locks have been created incorrectly state conflict happens 
