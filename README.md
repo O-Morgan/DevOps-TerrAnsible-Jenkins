@@ -404,5 +404,3 @@ name = "mtc_igw-${random_id.random.dec}"
 ## License
 
 This project is licensed under the MIT License.
-
-test
