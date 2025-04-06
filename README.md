@@ -309,6 +309,66 @@ Or in your workflow:
   run: terraform plan
 ```
 
+## Why `.tfvars` Files May Be Greyed Out
+
+Terraform variable files like `dev.tfvars` often appear greyed out in VS Code or don't show up in `git status` because they are **ignored by Git** by default.
+
+This is usually controlled by your `.gitignore` file, which often includes:
+
+```gitignore
+*.tfvars
+*.tfvars.json
+```
+
+This is done to prevent committing sensitive information like passwords, secrets, or environment-specific configuration.
+
+---
+
+## How to Track a `.tfvars` File (If It's Safe)
+
+### Option 1: Temporarily Track the File
+
+Force-add the file even if it’s ignored:
+
+```bash
+git add -f dev.tfvars
+git commit -m "Track dev.tfvars"
+```
+
+> This is okay for non-sensitive values and personal testing.
+
+---
+
+### Option 2: Allow `.tfvars` Files to Be Tracked
+
+Comment out the ignore rule in `.gitignore`:
+
+```gitignore
+# *.tfvars
+```
+
+Then add your file normally:
+
+```bash
+git add dev.tfvars
+git commit -m "Add dev.tfvars"
+```
+
+> ⚠️ Be careful not to commit secrets or credentials!
+
+---
+
+## ✅ Best Practice
+
+Keep sensitive `.tfvars` files ignored and instead provide a template like:
+
+```bash
+cp dev.tfvars.example dev.tfvars
+```
+
+Then users can populate their own values locally without risking credentials being committed.
+
+
 ## Random Provider
 
 Random is another provider — you need to run:
@@ -345,5 +405,4 @@ name = "mtc_igw-${random_id.random.dec}"
 
 This project is licensed under the MIT License.
 
-remember to add dividers 
 
