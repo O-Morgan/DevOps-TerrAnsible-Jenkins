@@ -33,7 +33,7 @@ resource "aws_route" "default_route" {
 }
 
 resource "aws_default_route_table" "mtc_private_rt" {
-  default_route_table_id = aws_vpc.mtc_vpc.default_security_group_id
+  default_route_table_id = aws_vpc.mtc_vpc.default_route_table_id
 
   tags = {
     Name = "mtc-private-rt"
