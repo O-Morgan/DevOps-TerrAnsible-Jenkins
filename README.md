@@ -255,6 +255,60 @@ vpc_cidr = "10.2.0.0/16"
 
 Obviously, the default will be removed from the main `variables.tf`.
 
+## Using `.tfvars` Files with Terraform
+
+Terraform does **not automatically load** custom variable files like `dev.tfvars` or `prod.tfvars` unless you explicitly tell it to.
+
+If you're using multiple environments (e.g. `dev.tfvars`, `prod.tfvars`), you must pass the file manually using the `-var-file` flag:
+
+```bash
+terraform plan -var-file="dev.tfvars"
+```
+
+---
+
+### Using `.tfvars` in GitHub Actions
+
+In your GitHub Actions workflow, include the `-var-file` flag like this:
+
+```yaml
+- name: Terraform Plan
+  run: terraform plan -var-file="dev.tfvars"
+```
+
+If your Terraform code is inside a subdirectory (e.g. `terraform/`), update the `working-directory` accordingly:
+
+```yaml
+- name: Terraform Plan
+  run: terraform plan -var-file="../../dev.tfvars"
+  working-directory: ./terraform/modules/networking
+```
+
+---
+
+### Using a Single `.tfvars` File Without Environments
+
+If you’re not using separate environments (like dev or prod), you can simply name your variable file:
+
+```bash
+terraform.tfvars
+```
+
+Terraform will automatically detect and use this file **without needing to pass it manually**.
+
+This also means you **don’t need to update your GitHub Actions** — just keep the filename as `terraform.tfvars` and use:
+
+```bash
+terraform plan
+```
+
+Or in your workflow:
+
+```yaml
+- name: Terraform Plan
+  run: terraform plan
+```
+
 ## Random Provider
 
 Random is another provider — you need to run:
