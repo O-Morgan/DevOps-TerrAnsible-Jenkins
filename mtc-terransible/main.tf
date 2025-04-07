@@ -1,3 +1,7 @@
+# aws availability zones are declared as data instead of resource https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/availability_zones 
+# you can use aws ec2 describe-availability-zones --region us-east-1 to get a list available within a region
+data "aws_availability_zones" "available" {}
+
 resource "aws_vpc" "mtc_vpc" {
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
